@@ -1,36 +1,55 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
+
+// コインを投げて表か裏かをランダムに決定する関数
+int flip_coin()
+{
+    return rand() % 2; // 0が表、1が裏を表す
+}
 
 int main()
 {
-    // 乱数のシードを設定
-    srand(time(NULL));
+    srand(time(NULL)); // 乱数の初期化
 
-    // 最初のリビジョンのメッセージを表示
-    printf("HoT: 初期リビジョン\n");
+    // ユーザー名の入力を求める
+    char user_name[100];
+    printf("あなたは誰ですか？\n> ");
+    fgets(user_name, sizeof(user_name), stdin);
+    user_name[strcspn(user_name, "\n")] = 0; // 改行を削除
 
-    // ユーザーに名前を入力してもらう
-    char name[100];
-    printf("あなたの名前を入力してください: ");
-    fgets(name, sizeof(name), stdin);
+    printf("こんにちは、%s!\n", user_name);
 
-    // 名前の末尾に改行文字が含まれる場合は削除する
-    if (name[strlen(name) - 1] == '\n')
+    printf("コインを投げます...\n");
+    for (int round = 1; round <= 3; round++)
     {
-        name[strlen(name) - 1] = '\0';
+        int result = flip_coin();
+        if (result == 0)
+        {
+            printf("ラウンド %d: 表\n", round);
+        }
+        else
+        {
+            printf("ラウンド %d: 裏\n", round);
+        }
     }
 
-    // ユーザーに挨拶する
-    printf("%sさん、こんにちは！\n", name);
-
-    // 3ラウンドのコイン投げを模倣する
-    printf("コインを投げる...\n");
-    for (int round = 1; round <= 3; ++round)
+    // 5回のコイン投げ結果を集計
+    int heads_count = 0, tails_count = 0;
+    for (int i = 0; i < 5; i++)
     {
-        int result = rand() % 2 + 1; // 1は表、2は裏
-        printf("ラウンド %d: %s\n", round, (result == 1) ? "表" : "裏");
+        if (flip_coin() == 0)
+        {
+            heads_count++;
+        }
+        else
+        {
+            tails_count++;
+        }
     }
+
+    printf("表: %d、裏: %d\n", heads_count, tails_count);
 
     return 0;
 }
