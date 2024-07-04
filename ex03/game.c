@@ -1,55 +1,46 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <string.h>
 
-// コインを投げて表か裏かをランダムに決定する関数
-int flip_coin()
+const char *toss_coin()
 {
-    return rand() % 2; // 0が表、1が裏を表す
+    return rand() % 2 == 0 ? "Heads" : "Tails";
 }
 
 int main()
 {
-    srand(time(NULL)); // 乱数の初期化
+    srand(time(0));
 
-    // ユーザー名の入力を求める
-    char user_name[100];
-    printf("あなたは誰ですか？\n> ");
-    fgets(user_name, sizeof(user_name), stdin);
-    user_name[strcspn(user_name, "\n")] = 0; // 改行を削除
+    char name[50];
+    printf("Who are you? \n> ");
+    scanf("%s", name);
+    printf("Hello, %s!\n", name);
 
-    printf("こんにちは、%s!\n", user_name);
+    printf("Tossing a coin...\n");
 
-    printf("コインを投げます...\n");
-    for (int round = 1; round <= 3; round++)
-    {
-        int result = flip_coin();
-        if (result == 0)
-        {
-            printf("ラウンド %d: 表\n", round);
-        }
-        else
-        {
-            printf("ラウンド %d: 裏\n", round);
-        }
-    }
-
-    // 5回のコイン投げ結果を集計
     int heads_count = 0, tails_count = 0;
-    for (int i = 0; i < 5; i++)
+    const char *results[3];
+
+    for (int i = 0; i < 3; i++)
     {
-        if (flip_coin() == 0)
-        {
+        results[i] = toss_coin();
+        printf("Round %d: %s\n", i + 1, results[i]);
+        if (results[i][0] == 'H')
             heads_count++;
-        }
         else
-        {
             tails_count++;
-        }
     }
 
-    printf("表: %d、裏: %d\n", heads_count, tails_count);
+    printf("Heads: %d, Tails: %d\n", heads_count, tails_count);
+
+    if (heads_count > tails_count)
+    {
+        printf("%s won!\n", name);
+    }
+    else
+    {
+        printf("%s lost!\n", name);
+    }
 
     return 0;
 }
